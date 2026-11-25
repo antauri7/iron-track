@@ -4,7 +4,7 @@ Esta versión cubre el flujo principal de registro pero no todos los criterios d
 
 ## Antes de considerar la entrega completa
 
-- Conectar el repositorio de destino y verificar la URL publicada y la instalación en Android e iOS reales.
+- Verificar la instalación en Android e iOS reales. El repositorio está conectado y la URL de GitHub Pages ya se verificó en Opera.
 - Completar revisión técnica por ejercicio: ilustraciones del movimiento, posiciones iniciales, recorrido, respiración, errores, dificultad y referencias específicas. Actualmente se muestra un mapa anatómico original y una guía general, explícitamente identificados.
 - Completar el mapa con subdivisiones anatómicas (porciones del pectoral y deltoides, romboides, trapecio, erectores, braquial y antebrazos), fecha del último entrenamiento y evolución individual por región.
 - Ilustración interactiva para puntos de medición con instrucciones anatómicas por región. Actualmente hay formulario completo y guía general de consistencia.

@@ -19,8 +19,9 @@ La prueba de fotografías se amplió después de esa ejecución para incluir res
 - `npm audit --audit-level=moderate`: sin vulnerabilidades reportadas al finalizar.
 - Revisión visual mediante capturas de escritorio, móvil y entrenamiento activo.
 - Inspección de recursos: no se incorporan capturas del usuario, fotos protegidas ni datos personales al build.
-- El workflow de Pages está escrito, pero no se ejecutó en GitHub porque no hay remoto de destino configurado.
+- El workflow de Pages se ejecutó correctamente en GitHub: validación y despliegue aprobados. Ejecución: https://github.com/antauri7/iron-track/actions/runs/45677935638
+- Aplicación publicada y carga verificada en Opera: https://antauri7.github.io/iron-track/
 
 ## No verificado
 
-Instalación en teléfonos físicos, despliegue público, actualización entre dos versiones de producción distintas, todas las variantes del entrenamiento, recuperación tras error de cuota, uso concurrente en pestañas y auditoría completa de accesibilidad. No se presentan como pruebas aprobadas.
+Instalación en teléfonos físicos, actualización entre dos versiones de producción distintas, todas las variantes del entrenamiento, recuperación tras error de cuota, uso concurrente en pestañas y auditoría completa de accesibilidad. No se presentan como pruebas aprobadas.

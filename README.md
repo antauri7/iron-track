@@ -42,7 +42,13 @@ Las pruebas funcionales se ejecutan sobre `dist` en el puerto 4173. Compila desp
 
 ## Publicación en GitHub Pages
 
-El checkout inicial no tenía archivos ni remoto. La rama de trabajo es `codex/iron-track`. No se ha publicado la aplicación.
+El checkout inicial no tenía archivos ni remoto. La rama de trabajo es `codex/iron-track`, vinculada a `origin/main`.
+
+Aplicación publicada: https://antauri7.github.io/iron-track/
+
+Repositorio: https://github.com/antauri7/iron-track
+
+El primer despliegue mediante GitHub Actions terminó correctamente el 25/11/2026 y la carga de la aplicación se verificó en Opera.
 
 1. Conecta el repositorio de destino, conservando su visibilidad.
 2. Integra el código en `main`.
