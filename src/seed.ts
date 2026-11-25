@@ -1,0 +1,543 @@
+import type { Exercise, Routine, State } from "./model";
+export const seedExercises: Exercise[] = [
+  {
+    id: "ex-1",
+    name: "Sentadilla Hack",
+    muscle: "Cuádriceps",
+    secondary: ["Glúteos"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-2",
+    name: "Femoral tumbado",
+    muscle: "Isquiotibiales",
+    secondary: ["Glúteos"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-3",
+    name: "Sentadilla búlgara",
+    muscle: "Cuádriceps",
+    secondary: ["Glúteos"],
+    equipment: "Máquina",
+    unilateral: true,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-4",
+    name: "Extensión de cuádriceps",
+    muscle: "Cuádriceps",
+    secondary: ["Glúteos"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-5",
+    name: "Femoral unilateral",
+    muscle: "Isquiotibiales",
+    secondary: ["Glúteos"],
+    equipment: "Máquina",
+    unilateral: true,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-6",
+    name: "Elevación de pantorrillas en Smith",
+    muscle: "Pantorrillas",
+    secondary: [],
+    equipment: "Smith",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-7",
+    name: "Jalón al pecho con agarre neutro",
+    muscle: "Espalda",
+    secondary: ["Bíceps"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-8",
+    name: "Remo en punta",
+    muscle: "Espalda",
+    secondary: ["Bíceps"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-9",
+    name: "Remo con mancuernas en banco inclinado",
+    muscle: "Espalda",
+    secondary: ["Bíceps"],
+    equipment: "Mancuernas",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-10",
+    name: "Pullover en polea alta",
+    muscle: "Espalda",
+    secondary: ["Bíceps"],
+    equipment: "Polea",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-11",
+    name: "Curl predicador con barra Z",
+    muscle: "Bíceps",
+    secondary: [],
+    equipment: "Barra",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-12",
+    name: "Curl martillo sentado con mancuernas",
+    muscle: "Bíceps",
+    secondary: [],
+    equipment: "Mancuernas",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-13",
+    name: "Rompecráneos con barra Z",
+    muscle: "Tríceps",
+    secondary: [],
+    equipment: "Barra",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-14",
+    name: "Extensión de tríceps en polea alta, agarre prono",
+    muscle: "Tríceps",
+    secondary: [],
+    equipment: "Polea",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-15",
+    name: "Press inclinado con mancuernas",
+    muscle: "Pecho",
+    secondary: ["Tríceps", "Hombros"],
+    equipment: "Mancuernas",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-16",
+    name: "Press plano con barra",
+    muscle: "Pecho",
+    secondary: ["Tríceps", "Hombros"],
+    equipment: "Barra",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-17",
+    name: "Peck deck o mariposa",
+    muscle: "Pecho",
+    secondary: ["Tríceps", "Hombros"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-18",
+    name: "Press militar sentado con barra",
+    muscle: "Hombros",
+    secondary: ["Tríceps"],
+    equipment: "Barra",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-19",
+    name: "Elevaciones laterales con mancuernas",
+    muscle: "Hombros",
+    secondary: ["Tríceps"],
+    equipment: "Mancuernas",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-20",
+    name: "Peck deck inverso",
+    muscle: "Hombros",
+    secondary: ["Tríceps"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-21",
+    name: "Peso muerto rumano",
+    muscle: "Isquiotibiales",
+    secondary: ["Glúteos"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-22",
+    name: "Femoral sentado",
+    muscle: "Isquiotibiales",
+    secondary: ["Glúteos"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-23",
+    name: "Sentadilla sumo",
+    muscle: "Cuádriceps",
+    secondary: ["Glúteos", "Aductores"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-24",
+    name: "Patada de glúteo en polea",
+    muscle: "Glúteos",
+    secondary: [],
+    equipment: "Polea",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-25",
+    name: "Elevación de pantorrillas",
+    muscle: "Pantorrillas",
+    secondary: [],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-26",
+    name: "Remo abierto con agarre prono",
+    muscle: "Espalda",
+    secondary: ["Bíceps"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-27",
+    name: "Jalón al pecho con agarre prono",
+    muscle: "Espalda",
+    secondary: ["Bíceps"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-28",
+    name: "Remo Gironda con agarre cerrado",
+    muscle: "Espalda",
+    secondary: ["Bíceps"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-29",
+    name: "Pullover en polea con banco inclinado",
+    muscle: "Espalda",
+    secondary: ["Bíceps"],
+    equipment: "Polea",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-30",
+    name: "Curl inclinado con mancuernas",
+    muscle: "Bíceps",
+    secondary: [],
+    equipment: "Mancuernas",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-31",
+    name: "Curl predicador prono con barra Z",
+    muscle: "Bíceps",
+    secondary: [],
+    equipment: "Barra",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-32",
+    name: "Extensión unilateral de tríceps tras nuca en polea baja",
+    muscle: "Tríceps",
+    secondary: [],
+    equipment: "Polea",
+    unilateral: true,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-33",
+    name: "Extensión de tríceps en polea alta",
+    muscle: "Tríceps",
+    secondary: [],
+    equipment: "Polea",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-34",
+    name: "Press inclinado en Smith",
+    muscle: "Pecho",
+    secondary: ["Tríceps", "Hombros"],
+    equipment: "Smith",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-35",
+    name: "Máquina de empuje sentado",
+    muscle: "Pecho",
+    secondary: ["Tríceps", "Hombros"],
+    equipment: "Máquina",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-36",
+    name: "Cruces de poleas de abajo hacia arriba",
+    muscle: "Pecho",
+    secondary: ["Tríceps", "Hombros"],
+    equipment: "Polea",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-37",
+    name: "Press militar con mancuernas",
+    muscle: "Hombros",
+    secondary: ["Tríceps"],
+    equipment: "Mancuernas",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-38",
+    name: "Elevaciones laterales en polea",
+    muscle: "Hombros",
+    secondary: ["Tríceps"],
+    equipment: "Polea",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-39",
+    name: "Aperturas posteriores con mancuernas",
+    muscle: "Hombros",
+    secondary: ["Tríceps"],
+    equipment: "Mancuernas",
+    unilateral: false,
+    instruction:
+      "Ajusta el equipo a tu cuerpo. Mantén una posición estable y controla el recorrido sin rebotes. Exhala durante el esfuerzo. Detente si aparece dolor.",
+  },
+  {
+    id: "ex-40",
+    name: "Crunch en polea",
+    muscle: "Abdomen",
+    secondary: [],
+    equipment: "Polea",
+    unilateral: false,
+    instruction:
+      "Mantén el tronco estable y respira sin contener el aire. Utiliza un recorrido controlado y sin dolor.",
+  },
+  {
+    id: "ex-41",
+    name: "Plancha abdominal",
+    muscle: "Abdomen",
+    secondary: [],
+    equipment: "Peso corporal",
+    unilateral: false,
+    instruction:
+      "Mantén el tronco estable y respira sin contener el aire. Utiliza un recorrido controlado y sin dolor.",
+  },
+  {
+    id: "ex-42",
+    name: "Pallof press",
+    muscle: "Abdomen",
+    secondary: [],
+    equipment: "Polea",
+    unilateral: false,
+    instruction:
+      "Mantén el tronco estable y respira sin contener el aire. Utiliza un recorrido controlado y sin dolor.",
+  },
+  {
+    id: "ex-43",
+    name: "Elevación de rodillas",
+    muscle: "Abdomen",
+    secondary: [],
+    equipment: "Peso corporal",
+    unilateral: false,
+    instruction:
+      "Mantén el tronco estable y respira sin contener el aire. Utiliza un recorrido controlado y sin dolor.",
+  },
+  {
+    id: "ex-44",
+    name: "Dead bug",
+    muscle: "Abdomen",
+    secondary: [],
+    equipment: "Peso corporal",
+    unilateral: false,
+    instruction:
+      "Mantén el tronco estable y respira sin contener el aire. Utiliza un recorrido controlado y sin dolor.",
+  },
+];
+export const seedRoutines: Routine[] = [
+  {
+    id: "routine-1",
+    name: "Pierna A",
+    day: 1,
+    version: 1,
+    exercises: [
+      { exerciseId: "ex-1", sets: 3, min: 6, max: 8, rir: 1, rest: 180 },
+      { exerciseId: "ex-2", sets: 3, min: 8, max: 12, rir: 1, rest: 120 },
+      { exerciseId: "ex-3", sets: 2, min: 8, max: 10, rir: 1, rest: 120 },
+      { exerciseId: "ex-4", sets: 3, min: 10, max: 15, rir: 1, rest: 90 },
+      { exerciseId: "ex-5", sets: 3, min: 10, max: 12, rir: 1, rest: 90 },
+      { exerciseId: "ex-6", sets: 4, min: 10, max: 15, rir: 1, rest: 90 },
+    ],
+  },
+  {
+    id: "routine-2",
+    name: "Espalda + Brazos A",
+    day: 2,
+    version: 1,
+    exercises: [
+      { exerciseId: "ex-7", sets: 3, min: 6, max: 8, rir: 1, rest: 180 },
+      { exerciseId: "ex-8", sets: 3, min: 6, max: 8, rir: 1, rest: 180 },
+      { exerciseId: "ex-9", sets: 2, min: 10, max: 12, rir: 1, rest: 120 },
+      { exerciseId: "ex-10", sets: 2, min: 12, max: 15, rir: 1, rest: 90 },
+      { exerciseId: "ex-11", sets: 3, min: 8, max: 10, rir: 1, rest: 90 },
+      { exerciseId: "ex-12", sets: 3, min: 10, max: 12, rir: 1, rest: 90 },
+      { exerciseId: "ex-13", sets: 2, min: 10, max: 12, rir: 2, rest: 90 },
+      { exerciseId: "ex-14", sets: 3, min: 10, max: 15, rir: 2, rest: 90 },
+    ],
+  },
+  {
+    id: "routine-3",
+    name: "Pecho + Hombro A",
+    day: 3,
+    version: 1,
+    exercises: [
+      { exerciseId: "ex-15", sets: 3, min: 6, max: 8, rir: 1, rest: 180 },
+      { exerciseId: "ex-16", sets: 3, min: 6, max: 8, rir: 1, rest: 180 },
+      { exerciseId: "ex-17", sets: 3, min: 10, max: 15, rir: 1, rest: 90 },
+      { exerciseId: "ex-18", sets: 3, min: 8, max: 10, rir: 2, rest: 120 },
+      { exerciseId: "ex-19", sets: 3, min: 12, max: 20, rir: 1, rest: 90 },
+      { exerciseId: "ex-20", sets: 2, min: 12, max: 15, rir: 1, rest: 90 },
+    ],
+  },
+  {
+    id: "routine-4",
+    name: "Pierna B",
+    day: 4,
+    version: 1,
+    exercises: [
+      { exerciseId: "ex-21", sets: 3, min: 8, max: 10, rir: 2, rest: 180 },
+      { exerciseId: "ex-1", sets: 3, min: 8, max: 10, rir: 1, rest: 180 },
+      { exerciseId: "ex-22", sets: 4, min: 10, max: 12, rir: 1, rest: 120 },
+      { exerciseId: "ex-23", sets: 2, min: 10, max: 12, rir: 2, rest: 120 },
+      { exerciseId: "ex-4", sets: 2, min: 12, max: 15, rir: 1, rest: 90 },
+      { exerciseId: "ex-24", sets: 2, min: 12, max: 15, rir: 1, rest: 90 },
+      { exerciseId: "ex-25", sets: 4, min: 12, max: 20, rir: 1, rest: 90 },
+    ],
+  },
+  {
+    id: "routine-5",
+    name: "Espalda + Brazos B",
+    day: 5,
+    version: 1,
+    exercises: [
+      { exerciseId: "ex-26", sets: 3, min: 8, max: 12, rir: 1, rest: 120 },
+      { exerciseId: "ex-27", sets: 3, min: 8, max: 12, rir: 1, rest: 120 },
+      { exerciseId: "ex-28", sets: 2, min: 10, max: 12, rir: 1, rest: 120 },
+      { exerciseId: "ex-29", sets: 2, min: 12, max: 15, rir: 1, rest: 90 },
+      { exerciseId: "ex-30", sets: 3, min: 10, max: 12, rir: 1, rest: 90 },
+      { exerciseId: "ex-31", sets: 3, min: 12, max: 15, rir: 1, rest: 90 },
+      { exerciseId: "ex-32", sets: 3, min: 10, max: 15, rir: 2, rest: 90 },
+      { exerciseId: "ex-33", sets: 2, min: 12, max: 15, rir: 2, rest: 90 },
+    ],
+  },
+  {
+    id: "routine-6",
+    name: "Pecho + Hombro B",
+    day: 6,
+    version: 1,
+    exercises: [
+      { exerciseId: "ex-34", sets: 3, min: 8, max: 10, rir: 1, rest: 150 },
+      { exerciseId: "ex-35", sets: 3, min: 10, max: 12, rir: 1, rest: 120 },
+      { exerciseId: "ex-36", sets: 3, min: 12, max: 15, rir: 1, rest: 90 },
+      { exerciseId: "ex-37", sets: 2, min: 10, max: 12, rir: 2, rest: 120 },
+      { exerciseId: "ex-38", sets: 3, min: 12, max: 20, rir: 1, rest: 90 },
+      { exerciseId: "ex-39", sets: 2, min: 12, max: 20, rir: 1, rest: 90 },
+    ],
+  },
+];
+export const initialState = (): State => ({
+  profile: null,
+  exercises: structuredClone(seedExercises),
+  routines: structuredClone(seedRoutines),
+  sessions: [],
+  measurements: [],
+  recovery: [],
+  decisions: [],
+});
