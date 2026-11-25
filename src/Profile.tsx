@@ -4,7 +4,7 @@ import { db, download, validateBackup, blobData, readPhotos } from "./storage";
 import { type Profile, today, dateLabel } from "./model";
 import { useApp, Card, Field, Num } from "./ui";
 function ProfilePage() {
-  const { state, mutate, notify } = useApp();
+  const { state, mutate, notify, saveStatus } = useApp();
   const profile = state.profile;
   const [preview, setPreview] = useState<ReturnType<
     typeof validateBackup
@@ -38,6 +38,20 @@ function ProfilePage() {
       <div className="two-cols">
         <Card>
           <h2>Datos personales</h2>
+          <p
+            className={"save-indicator " + saveStatus}
+            aria-live="polite"
+            data-testid="save-status"
+          >
+            {saveStatus === "saving"
+              ? "Guardando cambios…"
+              : saveStatus === "error"
+                ? "No se pudo guardar. Revisa el aviso de almacenamiento."
+                : "Cambios guardados en este dispositivo"}
+          </p>
+          <small className="autosave-help">
+            El guardado es automático; no necesitas pulsar Guardar.
+          </small>
           <p>
             Introduce y confirma tus datos aquí. No se precargan ni se publican
             en el repositorio.
@@ -52,6 +66,7 @@ function ProfilePage() {
             <Field label="Edad">
               <Num
                 label="Edad"
+                step="1"
                 min={1}
                 max={120}
                 value={profile.age}
@@ -61,6 +76,7 @@ function ProfilePage() {
             <Field label="Estatura (cm)">
               <Num
                 label="Estatura"
+                step="1"
                 min={30}
                 max={260}
                 value={profile.height}
@@ -68,6 +84,9 @@ function ProfilePage() {
               />
             </Field>
           </div>
+          <small>
+            Escribe tu estatura en centímetros: 1.75 m equivale a 175 cm.
+          </small>
           <Field label="Experiencia de entrenamiento">
             <input
               value={profile.experience}

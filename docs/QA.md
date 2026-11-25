@@ -25,3 +25,7 @@ La prueba de fotografías se amplió después de esa ejecución para incluir res
 ## No verificado
 
 Instalación en teléfonos físicos, actualización entre dos versiones de producción distintas, todas las variantes del entrenamiento, recuperación tras error de cuota, uso concurrente en pestañas y auditoría completa de accesibilidad. No se presentan como pruebas aprobadas.
+
+## Actualización 0.1.1: iPhone y guardado de perfil
+
+Se añadió una prueba de regresión al introducir estatura dígito por dígito y recuperar el perfil tras recargar. La simulación móvil usa 440 × 956 píxeles CSS y DPR 3, con orientación horizontal adicional; comprueba tamaño de texto, controles de 44 px, ausencia de desborde y cancelación de eventos de zoom sin bloquear el desplazamiento con un dedo. La confirmación de guardado solo aparece tras terminar las escrituras IndexedDB pendientes. No se ha probado físicamente un iPhone 17 Pro Max ni el zoom de accesibilidad del sistema.

@@ -37,6 +37,10 @@ export default function App() {
   const [state, setState] = useState<State | null>(null);
   const ref = useRef<State | null>(null);
   const queue = useRef(Promise.resolve());
+  const pendingSaves = useRef(0);
+  const [saveStatus, setSaveStatus] = useState<"saving" | "saved" | "error">(
+    "saved",
+  );
   const [message, notify] = useState("");
   const [error, setError] = useState("");
   const [update, setUpdate] = useState<
@@ -84,16 +88,22 @@ export default function App() {
     fn(next);
     ref.current = next;
     setState(next);
+    pendingSaves.current += 1;
+    setSaveStatus("saving");
     queue.current = queue.current
       .then(async () => {
         await db.state.put({ id: "main", value: next });
         setError("");
+        pendingSaves.current -= 1;
+        if (pendingSaves.current === 0) setSaveStatus("saved");
       })
-      .catch(() =>
+      .catch(() => {
+        pendingSaves.current -= 1;
+        setSaveStatus("error");
         setError(
           "No se pudo guardar el último cambio. Exporta un respaldo y revisa el espacio del dispositivo.",
-        ),
-      );
+        );
+      });
   };
   if (!state)
     return (
@@ -104,7 +114,7 @@ export default function App() {
       </main>
     );
   return (
-    <Context.Provider value={{ state, mutate, notify }}>
+    <Context.Provider value={{ state, mutate, notify, saveStatus }}>
       <div className="app">
         <aside>
           <NavLink className="brand" to="/">

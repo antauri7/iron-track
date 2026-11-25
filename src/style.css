@@ -1832,3 +1832,142 @@ summary {
 .exercise-guide[open] > summary > svg {
   transform: rotate(90deg);
 }
+/* Stable installed-app viewport, including iPhone Pro Max safe areas. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: pan-x pan-y;
+  scroll-padding-bottom: calc(110px + env(safe-area-inset-bottom));
+}
+body,
+.app {
+  min-height: 100svh;
+}
+.save-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+.save-indicator:before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+.save-indicator.saved {
+  color: var(--accent);
+}
+.save-indicator.error {
+  color: #f87171;
+}
+.autosave-help {
+  display: block;
+  margin-bottom: 18px;
+}
+@media (max-width: 800px), (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  .active-layout .row select {
+    font-size: 16px;
+  }
+  .history-set input,
+  .history-set select {
+    font-size: 16px;
+  }
+  button,
+  .button {
+    min-height: 44px;
+  }
+}
+@media (max-width: 800px) {
+  .content {
+    padding-top: env(safe-area-inset-top);
+    padding-left: max(22px, env(safe-area-inset-left));
+    padding-right: max(22px, env(safe-area-inset-right));
+    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+  }
+  aside {
+    padding-left: max(8px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
+  }
+  .toast {
+    bottom: calc(90px + env(safe-area-inset-bottom));
+  }
+  .modal-backdrop {
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+  .modal {
+    max-height: calc(
+      100dvh - max(16px, env(safe-area-inset-top)) -
+        max(16px, env(safe-area-inset-bottom))
+    );
+  }
+  .checkbox {
+    min-height: 44px;
+  }
+  .check-button {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+  }
+  .set-head,
+  .set-row {
+    grid-template-columns: 26px 42px minmax(0, 1fr) minmax(0, 1fr) 42px 44px;
+  }
+}
+@media (max-width: 375px) {
+  .content {
+    padding-left: max(15px, env(safe-area-inset-left));
+    padding-right: max(15px, env(safe-area-inset-right));
+  }
+  .set-head,
+  .set-row {
+    grid-template-columns: 20px 34px minmax(0, 1fr) minmax(0, 1fr) 34px 44px;
+    gap: 4px;
+  }
+}
+@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+  aside {
+    width: 100%;
+    height: calc(62px + env(safe-area-inset-bottom));
+    inset: auto 0 0;
+    padding: 0 max(10px, env(safe-area-inset-right)) env(safe-area-inset-bottom)
+      max(10px, env(safe-area-inset-left));
+    border-top: 1px solid var(--border);
+  }
+  aside .brand,
+  .aside-note {
+    display: none;
+  }
+  nav {
+    flex-direction: row;
+    margin: 0;
+    gap: 0;
+  }
+  nav a {
+    flex: 1;
+    min-height: 58px;
+    justify-content: center;
+    padding: 8px;
+  }
+  nav a.active {
+    box-shadow: none;
+  }
+  .content {
+    margin-left: 0;
+    padding: env(safe-area-inset-top) max(22px, env(safe-area-inset-right))
+      calc(80px + env(safe-area-inset-bottom))
+      max(22px, env(safe-area-inset-left));
+  }
+}
