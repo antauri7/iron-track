@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.1.2 — 25/11/2026
+
+Corregido el ancho de los campos nativos de fecha y mes en Safari/iOS para mantenerlos dentro de sus tarjetas, incluido el inicio del ciclo en Mi Coach. Se conserva el selector nativo y el guardado automático.
+
 ## 0.1.1 — 25/11/2026
 
 Corregida la escritura de valores numéricos con mínimo (como estatura); indicador real de guardado automático en Perfil; campos móviles de al menos 16 px para evitar zoom al enfocar; bloqueo de gestos de zoom de la interfaz; zonas seguras y controles de 44 px en iPhone Pro Max, incluidos modo instalado y orientación horizontal. El zoom de accesibilidad del sistema sigue bajo control de iOS. No se cambia el esquema ni se elimina información local.
