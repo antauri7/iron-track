@@ -26,6 +26,7 @@ const Calculators = lazy(() => import("./Calculators"));
 const History = lazy(() => import("./History"));
 const Science = lazy(() => import("./Science"));
 const Reports = lazy(() => import("./Reports"));
+const Journal = lazy(() => import("./Journal"));
 const nav = [
   ["/", "Inicio", House],
   ["/entrenar", "Entrenar", Dumbbell],
@@ -202,6 +203,7 @@ export default function App() {
               <Route path="/historial" element={<History />} />
               <Route path="/ciencia" element={<Science />} />
               <Route path="/informes" element={<Reports />} />
+              <Route path="/bitacora" element={<Journal />} />
               <Route
                 path="*"
                 element={

@@ -4,6 +4,9 @@ Aplicación de entrenamiento de fuerza en español de México. Primera versión 
 
 ## Funciones disponibles
 
+- Bitácora semanal, metas personales de proceso y progreso por días únicos, sin datos simulados.
+- Vista semanal con acceso al historial del día y estado del último respaldo generado.
+
 - Seis rutinas iniciales, con distribución de 18 / 21 / 17 / 20 / 21 / 16 series: 113 en total.
 - Crear, editar, duplicar, archivar, reordenar y restaurar rutinas. Las sesiones conservan una copia de su planificación.
 - Sesiones eliminables con confirmación y Papelera recuperable; cancelación con conservación opcional como parcial; comentarios generales por ejercicio.

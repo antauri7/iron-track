@@ -1,5 +1,6 @@
 import SessionRemoval from "./SessionRemoval";
-import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Download, Trash2, RotateCcw } from "lucide-react";
 import { download } from "./storage";
 import { type Session, type SetLog, today, dateLabel, dayKey } from "./model";
@@ -7,14 +8,33 @@ import { createSession, physicalSets, tonnage, restoreSession } from "./engine";
 import { useApp, Card, Empty, Field, Num } from "./ui";
 function History() {
   const { state, mutate, notify } = useApp();
-  const [month, setMonth] = useState(today().slice(0, 7));
+  const [search] = useSearchParams();
+  const requested = search.get("fecha") ?? "";
+  const validRequested =
+    /^\d{4}-\d{2}-\d{2}$/.test(requested) &&
+    !Number.isNaN(Date.parse(requested + "T12:00:00Z")) &&
+    new Date(requested + "T12:00:00Z").toISOString().slice(0, 10) === requested;
+  const [month, setMonth] = useState(
+    (validRequested ? requested : today()).slice(0, 7),
+  );
   const [selected, setSelected] = useState<Session | null>(null);
-  const [date, setDate] = useState(today());
+  const [date, setDate] = useState(validRequested ? requested : today());
+  const [selectedOnly, setSelectedOnly] = useState(validRequested);
+  useEffect(() => {
+    if (validRequested) {
+      setMonth(requested.slice(0, 7));
+      setDate(requested);
+      setSelectedOnly(true);
+    }
+  }, [requested]);
   const [removing, setRemoving] = useState<Session | null>(null);
   const [trashOpen, setTrashOpen] = useState(false);
   const sorted = [...state.sessions]
     .filter((s) => dayKey(s.startedAt).slice(0, 7) === month)
     .sort((a, b) => b.startedAt.localeCompare(a.startedAt));
+  const visible = selectedOnly
+    ? sorted.filter((s) => dayKey(s.startedAt) === date)
+    : sorted;
   const count = new Date(
     Number(month.slice(0, 4)),
     Number(month.slice(5)),
@@ -100,7 +120,12 @@ function History() {
           <input
             type="month"
             value={month}
-            onChange={(e) => e.target.value && setMonth(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value) {
+                setMonth(e.target.value);
+                setSelectedOnly(false);
+              }
+            }}
           />
         </Field>
         <div className="calendar">
@@ -120,7 +145,10 @@ function History() {
               <button
                 className={sessions.length ? "trained" : ""}
                 key={d}
-                onClick={() => setDate(d)}
+                onClick={() => {
+                  setDate(d);
+                  setSelectedOnly(true);
+                }}
               >
                 <strong>{i + 1}</strong>
                 <small>
@@ -135,8 +163,16 @@ function History() {
           {sorted.filter((s) => dayKey(s.startedAt) === date).length} sesiones
         </p>
       </Card>
-      {sorted.length ? (
-        sorted.map((s) => (
+      {selectedOnly && (
+        <div className="section-title">
+          <h2>Sesiones del {dateLabel(date)}</h2>
+          <button onClick={() => setSelectedOnly(false)}>
+            Mostrar todo el mes
+          </button>
+        </div>
+      )}
+      {visible.length ? (
+        visible.map((s) => (
           <Card key={s.id}>
             <div className="row history-session">
               <div>
@@ -171,7 +207,11 @@ function History() {
           </Card>
         ))
       ) : (
-        <Empty>No hay entrenamientos registrados en este mes.</Empty>
+        <Empty>
+          {selectedOnly
+            ? "No hay entrenamientos registrados en esta fecha."
+            : "No hay entrenamientos registrados en este mes."}
+        </Empty>
       )}
       <Card>
         <button

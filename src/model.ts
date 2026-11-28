@@ -148,8 +148,31 @@ export type Decision = {
   key: string;
   decision: string;
 };
+export type WeeklyReview = {
+  id: string;
+  weekStart: string;
+  wins: string;
+  challenge: string;
+  nextStep: string;
+  updatedAt: string;
+};
+export type ProcessGoal = {
+  id: string;
+  title: string;
+  metric: "trainingDays" | "measurementDays" | "reviewWeeks";
+  target: number;
+  start: string;
+  end: string;
+  archived?: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+export type BackupInfo = { generatedAt: string; includesPhotos: boolean };
 export type State = {
   profile: Profile | null;
+  weeklyReviews?: WeeklyReview[];
+  processGoals?: ProcessGoal[];
+  backupInfo?: BackupInfo;
   exercises: Exercise[];
   routines: Routine[];
   sessions: Session[];

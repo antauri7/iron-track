@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Download, Upload, Trash2 } from "lucide-react";
-import { db, download, validateBackup, blobData, readPhotos } from "./storage";
+import { db, validateBackup, exportBackup } from "./storage";
 import { type Profile, today, dateLabel } from "./model";
 import { useApp, Card, Field, Num } from "./ui";
 function ProfilePage() {
@@ -207,6 +207,15 @@ function ProfilePage() {
       </div>
       <Card>
         <h2>Respaldo y restauración</h2>
+        {state.backupInfo && (
+          <p className="accent">
+            Último respaldo generado: {dateLabel(state.backupInfo.generatedAt)}{" "}
+            ·{" "}
+            {state.backupInfo.includesPhotos
+              ? "con fotografías"
+              : "sin fotografías"}
+          </p>
+        )}
         <p>
           El almacenamiento es local y no está sincronizado en la nube. Puede
           borrarse al limpiar el navegador o usar navegación privada.
@@ -230,26 +239,10 @@ function ProfilePage() {
             className="primary"
             onClick={async () => {
               try {
-                const photos = includePhotos
-                  ? await Promise.all(
-                      (await readPhotos()).map(async (p) => ({
-                        id: p.id,
-                        date: p.date,
-                        view: p.view,
-                        data: await blobData(p.blob),
-                      })),
-                    )
-                  : undefined;
-                download(
-                  `iron-track-${today()}.json`,
-                  JSON.stringify({
-                    app: "IRON TRACK",
-                    version: 1,
-                    exportedAt: new Date().toISOString(),
-                    data: state,
-                    photos,
-                  }),
-                );
+                const info = await exportBackup(state, includePhotos);
+                await mutate((s) => {
+                  s.backupInfo = info;
+                });
                 notify("Respaldo exportado. Guárdalo en un lugar privado.");
               } catch {
                 notify("No se pudo exportar el respaldo.");

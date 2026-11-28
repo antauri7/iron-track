@@ -1,3 +1,5 @@
+import { WeekPulse, GoalPreview, BackupStatus } from "./TrackingWidgets";
+import { trainingDates } from "./tracking-engine";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Dumbbell,
@@ -132,11 +134,16 @@ function Home() {
           />
           <Stat
             icon={<Check />}
-            label="Esta semana"
-            value={`${sessions.filter((s) => s.status === "completada").length} sesiones`}
+            label="Días entrenados"
+            value={`${trainingDates(state.sessions, range.start, date).length} días`}
             link="/historial"
           />
         </div>
+      </div>
+      <WeekPulse />
+      <div className="tracking-home-secondary">
+        <GoalPreview />
+        <BackupStatus />
       </div>
       <div className="section-title">
         <h2>Tu semana, en perspectiva</h2>
@@ -202,6 +209,7 @@ function Home() {
         </div>
         <ArrowUpRight />
       </NavLink>
+
       <div className="quick-links">
         <NavLink to="/biblioteca">
           <BookOpen />

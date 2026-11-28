@@ -50,3 +50,9 @@ Vitest prueba cálculos y persistencia con fake-indexeddb. Playwright usa el bui
 ## Campos compatibles añadidos en 0.2.0
 
 `SessionExercise.notes?` guarda el comentario general sin modificar series ni datos del ejercicio del catálogo. `State.sessionTrash?` conserva sesiones retiradas con su fecha de retirada. Ambos campos son opcionales: los estados y respaldos anteriores siguen siendo válidos sin transformación destructiva. No se cambia la versión de IndexedDB ni se borra ninguna tabla. La eliminación solo mueve el ID elegido, y restaurar devuelve el objeto original. Las estadísticas usan `sessions`, de modo que la Papelera queda excluida. Se impide restaurar una sesión activa si ya existe otra. Los respaldos JSON incluyen la Papelera cuando existe; los informes deportivos y CSV no cuentan sus sesiones.
+
+## Seguimiento personal en 0.3.0
+
+`State.weeklyReviews?`, `State.processGoals?` y `State.backupInfo?` son campos opcionales. Las reflexiones se identifican por lunes de la semana y no generan sesiones. Las metas cuentan días únicos de sesiones finalizadas/parciales con alguna serie efectiva completada, días de medición con valores o semanas de reflexión con contenido. Las semanas inicial y final de una meta pueden ser parciales. Las metas no alteran planes ni prescriben ejercicio. La Papelera, sesiones vacías y sesiones activas se excluyen del avance deportivo.
+
+Los respaldos siguen usando formato versión 1 con campos opcionales validados. El registro de respaldo indica cuándo se generó la copia y si contiene fotografías; no demuestra dónde se guardó físicamente el archivo ni implica sincronización. No hay borrado, cambio de tablas ni migración destructiva. Los estados y respaldos anteriores se admiten sin campos nuevos.

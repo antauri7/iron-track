@@ -2022,3 +2022,354 @@ body,
 .app * {
   touch-action: pan-x pan-y;
 }
+/* Personal process: calm, legible cards built from the user's own records. */
+.week-pulse {
+  margin-top: 22px;
+  background: linear-gradient(125deg, #b9f34b09, transparent 65%), var(--card);
+  border-color: #b9f34b24;
+}
+.week-pulse h2 {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+.week-pulse .row > div:first-child {
+  min-width: 0;
+  flex: 1;
+}
+.week-pulse p:not(.eyebrow) {
+  margin-bottom: 0;
+  font-size: 13px;
+}
+.week-orbit {
+  width: 82px;
+  height: 82px;
+  flex-shrink: 0;
+  background: conic-gradient(
+    var(--accent) var(--week-progress),
+    var(--border) 0
+  );
+  border-radius: 50%;
+  padding: 4px;
+}
+.week-orbit > div {
+  height: 100%;
+  border-radius: 50%;
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.week-orbit strong {
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+.week-orbit small {
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+.week-pulse-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin: 24px 0 12px;
+}
+.week-pulse-days > a {
+  min-height: 82px;
+  border: 1px solid var(--border);
+  background: var(--secondary);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.week-pulse-days small {
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+.week-pulse-days strong {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+.week-pulse-days > a > span {
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.week-pulse-days i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--muted);
+  opacity: 0.65;
+}
+.week-pulse-days .done {
+  border-color: #b9f34b66;
+  background: #b9f34b13;
+  color: var(--accent);
+}
+.week-pulse-days .today {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+.week-pulse-note {
+  display: block;
+  max-width: 680px;
+}
+.tracking-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--accent);
+  font-size: 12px;
+  min-height: 44px;
+}
+.week-pulse > .tracking-link {
+  margin-top: 8px;
+}
+.tracking-home-secondary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.tracking-home-secondary > .card {
+  margin-bottom: 0;
+}
+.goal-preview h3,
+.backup-status h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+}
+.goal-preview > p,
+.backup-status > p {
+  margin-top: 18px;
+}
+.goal-mini {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 16px;
+}
+.goal-mini strong {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.goal-mini .row > span {
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--muted);
+}
+.goal-track {
+  height: 7px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 14px 0;
+}
+.goal-track > div {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 10px;
+}
+.journal-invitation {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  margin-top: 22px;
+  border: 1px solid #b9f34b36;
+  background: linear-gradient(110deg, #b9f34b0b, transparent);
+  border-radius: 15px;
+}
+.journal-invitation > div {
+  flex: 1;
+  min-width: 0;
+}
+.journal-invitation h3 {
+  margin: 7px 0;
+  font-size: 19px;
+}
+.journal-invitation p {
+  margin: 0;
+  font-size: 12px;
+}
+.journal-invitation > svg {
+  color: var(--accent);
+}
+.tracking-layout {
+  display: grid;
+  grid-template-columns: 1.12fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+.weekly-review h2,
+.tracking-layout h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 21px;
+}
+.weekly-review > .row {
+  flex-wrap: wrap;
+}
+.review-prompt {
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  margin-top: 10px;
+}
+.review-number {
+  font-size: 11px;
+  color: var(--accent);
+  padding-top: 3px;
+}
+.review-prompt .field {
+  flex: 1;
+  min-width: 0;
+}
+.review-prompt textarea {
+  min-height: 112px;
+  font-size: 14px;
+}
+.process-goal {
+  padding: 22px 0 5px;
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+.process-goal h3 {
+  margin: 15px 0 8px;
+  overflow-wrap: anywhere;
+}
+.goal-state {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.goal-state.achieved {
+  color: var(--accent);
+}
+.process-goal .row > strong {
+  font-size: 25px;
+}
+.process-goal .row > strong > small {
+  font-size: 14px;
+}
+.goal-unit {
+  font-size: 11px;
+}
+.goals-empty {
+  text-align: center;
+  padding: 30px 5px 12px;
+}
+.goals-empty > svg {
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.goals-empty h3 {
+  font-size: 16px;
+}
+.goals-empty p {
+  font-size: 12px;
+}
+.review-history-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 15px;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  border-radius: 0;
+  padding: 16px 0;
+}
+.review-history-row > span {
+  min-width: 0;
+}
+.review-history-row strong {
+  display: block;
+  font-size: 13px;
+}
+.review-history-row small {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  font-weight: 400;
+  margin-top: 6px;
+}
+@media (max-width: 1050px) {
+  .tracking-layout {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+@media (max-width: 800px) {
+  .tracking-home-secondary {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .week-pulse h2 {
+    font-size: 23px;
+  }
+  .week-orbit {
+    width: 68px;
+    height: 68px;
+  }
+  .week-orbit strong {
+    font-size: 26px;
+  }
+  .week-pulse-days {
+    gap: 6px;
+  }
+  .week-pulse-days > a {
+    min-height: 76px;
+  }
+  .week-pulse-days strong {
+    font-size: 18px;
+  }
+  .review-prompt textarea {
+    font-size: 16px;
+  }
+  .goal-preview > .row,
+  .backup-status > .row {
+    flex-wrap: wrap;
+  }
+  .journal-invitation {
+    padding: 20px;
+  }
+  .journal-invitation h3 {
+    font-size: 17px;
+  }
+}
+@media (max-width: 430px) {
+  .week-pulse-days {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .week-pulse .eyebrow {
+    font-size: 8px;
+  }
+  .week-orbit {
+    width: 60px;
+    height: 60px;
+  }
+  .week-pulse h2 {
+    font-size: 21px;
+  }
+  .week-pulse .row {
+    gap: 10px;
+  }
+  .tracking-layout .card {
+    padding: 19px;
+  }
+}

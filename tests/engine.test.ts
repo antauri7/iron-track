@@ -283,3 +283,198 @@ describe("papelera y compatibilidad con sesiones antiguas", () => {
     expect(data.sessions).toHaveLength(1);
   });
 });
+
+describe("metas de proceso y bitácora", () => {
+  it("cuenta días reales una vez; excluye sesiones vacías y activas", async () => {
+    const { trainingDates, goalProgress } =
+      await import("../src/tracking-engine");
+    const state = initialState();
+    const completed = createSession(
+      seedRoutines[0],
+      seedExercises,
+      "2026-11-25T18:00:00.000Z",
+    );
+    completed.status = "parcial";
+    Object.assign(completed.exercises[0].sets[0], {
+      status: "completada",
+      weight: 40,
+      reps: 8,
+      rir: 2,
+    });
+    const duplicate = structuredClone(completed);
+    duplicate.id = crypto.randomUUID();
+    const empty = createSession(
+      seedRoutines[0],
+      seedExercises,
+      "2026-11-26T18:00:00.000Z",
+    );
+    empty.status = "completada";
+    const active = structuredClone(completed);
+    active.id = crypto.randomUUID();
+    active.startedAt = "2026-11-27T18:00:00.000Z";
+    active.status = "activa";
+    state.sessions = [completed, duplicate, empty, active];
+    expect(trainingDates(state.sessions, "2026-11-23", "2026-11-29")).toEqual([
+      "2026-11-25",
+    ]);
+    expect(
+      goalProgress(state, {
+        id: "g",
+        title: "Objetivo de prueba",
+        metric: "trainingDays",
+        target: 2,
+        start: "2026-11-23",
+        end: "2026-11-29",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }).count,
+    ).toBe(1);
+  });
+  it("cuenta mediciones por día y reflexiones semanales con contenido", async () => {
+    const { goalProgress } = await import("../src/tracking-engine");
+    const state = initialState();
+    state.measurements = [
+      {
+        id: "m1",
+        date: "2026-11-28",
+        values: { Peso: 70 },
+        method: "prueba",
+        notes: "",
+      },
+      {
+        id: "m2",
+        date: "2026-11-28",
+        values: { Cintura: 80 },
+        method: "prueba",
+        notes: "",
+      },
+      { id: "m3", date: "2026-11-29", values: {}, method: "prueba", notes: "" },
+    ];
+    const base = {
+      id: "g",
+      title: "Meta",
+      metric: "measurementDays" as const,
+      target: 2,
+      start: "2026-11-28",
+      end: "2026-12-10",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    expect(goalProgress(state, base).count).toBe(1);
+    state.weeklyReviews = [
+      {
+        id: "r",
+        weekStart: "2026-11-23",
+        wins: "Una mejora",
+        challenge: "",
+        nextStep: "",
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: "r2",
+        weekStart: "2026-11-30",
+        wins: " ",
+        challenge: "",
+        nextStep: "",
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+    expect(goalProgress(state, { ...base, metric: "reviewWeeks" }).count).toBe(
+      1,
+    );
+  });
+  it("construye la semana sin fallar en el cambio de año", async () => {
+    const { weekDays, shiftDate } = await import("../src/tracking-engine");
+    const days = weekDays(initialState(), "2027-01-01");
+    expect(days[0].date).toBe("2026-12-28");
+    expect(days[6].date).toBe("2027-01-03");
+    expect(shiftDate("2026-12-31", 1)).toBe("2027-01-01");
+  });
+  it("respaldos nuevos conservan metas, bitácora y datos previos", () => {
+    const data = initialState();
+    const session = createSession(seedRoutines[0], seedExercises);
+    data.sessions.push(session);
+    const original = structuredClone(data.sessions);
+    data.weeklyReviews = [
+      {
+        id: "r",
+        weekStart: "2026-11-23",
+        wins: "Avance",
+        challenge: "Equipo ocupado",
+        nextStep: "Planear mejor",
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+    data.processGoals = [
+      {
+        id: "g",
+        title: "Meta personal",
+        metric: "trainingDays",
+        target: 4,
+        start: "2026-11-23",
+        end: "2026-12-20",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+    data.backupInfo = {
+      generatedAt: new Date().toISOString(),
+      includesPhotos: false,
+    };
+    const parsed = validateBackup(
+      JSON.parse(
+        JSON.stringify({
+          app: "IRON TRACK",
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          data,
+        }),
+      ),
+    );
+    expect(parsed.data.sessions).toEqual(original);
+    expect(parsed.data.weeklyReviews).toEqual(data.weeklyReviews);
+    expect(parsed.data.processGoals).toEqual(data.processGoals);
+    expect(parsed.data.backupInfo).toEqual(data.backupInfo);
+  });
+  it("rechaza metas con fechas o cantidades inválidas y semanas duplicadas", () => {
+    const data = initialState();
+    const base = {
+      id: "g",
+      title: "Meta",
+      metric: "trainingDays" as const,
+      target: 4,
+      start: "2026-12-20",
+      end: "2026-11-23",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    data.processGoals = [base];
+    const b = {
+      app: "IRON TRACK",
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      data,
+    };
+    expect(() => validateBackup(b)).toThrow();
+    data.processGoals = [];
+    data.weeklyReviews = [
+      {
+        id: "r",
+        weekStart: "2026-11-23",
+        wins: "A",
+        challenge: "",
+        nextStep: "",
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: "r2",
+        weekStart: "2026-11-23",
+        wins: "B",
+        challenge: "",
+        nextStep: "",
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+    expect(() => validateBackup(b)).toThrow();
+  });
+});

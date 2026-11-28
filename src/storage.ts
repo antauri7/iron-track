@@ -1,6 +1,12 @@
 import Dexie, { type Table } from "dexie";
 import { z } from "zod";
-import { setSchema, type State, type Photo, muscles } from "./model";
+import {
+  setSchema,
+  type State,
+  type Photo,
+  type BackupInfo,
+  muscles,
+} from "./model";
 export class IronDB extends Dexie {
   state!: Table<{ id: string; value: State }>;
   photos!: Table<
@@ -125,7 +131,46 @@ const coreStateSchema = z.object({
     }),
   ),
 });
+const calendarDate = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .refine((s) => {
+    const d = new Date(s + "T12:00:00Z");
+    return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+  }, "Fecha inválida");
 export const stateSchema = coreStateSchema.extend({
+  weeklyReviews: z
+    .array(
+      z.object({
+        id: z.string(),
+        weekStart: calendarDate,
+        wins: z.string().max(2000),
+        challenge: z.string().max(2000),
+        nextStep: z.string().max(2000),
+        updatedAt: z.iso.datetime(),
+      }),
+    )
+    .optional(),
+  processGoals: z
+    .array(
+      z
+        .object({
+          id: z.string(),
+          title: z.string().min(1).max(120),
+          metric: z.enum(["trainingDays", "measurementDays", "reviewWeeks"]),
+          target: z.number().int().min(1).max(365),
+          start: calendarDate,
+          end: calendarDate,
+          archived: z.boolean().optional(),
+          createdAt: z.iso.datetime(),
+          updatedAt: z.iso.datetime(),
+        })
+        .refine((g) => g.end >= g.start, "El fin debe ser posterior al inicio"),
+    )
+    .optional(),
+  backupInfo: z
+    .object({ generatedAt: z.iso.datetime(), includesPhotos: z.boolean() })
+    .optional(),
   sessionTrash: z
     .array(
       z.object({
@@ -160,11 +205,16 @@ export function validateBackup(value: unknown) {
     b.data.measurements,
     b.data.recovery,
     b.data.decisions,
+    b.data.weeklyReviews ?? [],
+    b.data.processGoals ?? [],
     b.photos ?? [],
   ]) {
     if (new Set(group.map((x) => x.id)).size !== group.length)
       throw new Error("El respaldo contiene identificadores duplicados.");
   }
+  const reviewWeeks = (b.data.weeklyReviews ?? []).map((r) => r.weekStart);
+  if (new Set(reviewWeeks).size !== reviewWeeks.length)
+    throw new Error("Hay semanas duplicadas en la bitácora.");
   const ids = new Set(b.data.exercises.map((e) => e.id));
   if (
     b.data.routines.some((r) => r.exercises.some((e) => !ids.has(e.exerciseId)))
@@ -209,4 +259,36 @@ export async function writePhoto(p: Photo) {
     blob: await p.blob.arrayBuffer(),
     mime: p.blob.type,
   });
+}
+
+export async function exportBackup(
+  state: State,
+  includePhotos = false,
+): Promise<BackupInfo> {
+  const photos = includePhotos
+    ? await Promise.all(
+        (await readPhotos()).map(async (p) => ({
+          id: p.id,
+          date: p.date,
+          view: p.view,
+          data: await blobData(p.blob),
+        })),
+      )
+    : undefined;
+  const backupInfo = {
+    generatedAt: new Date().toISOString(),
+    includesPhotos: includePhotos,
+  };
+  const content = JSON.stringify({
+    app: "IRON TRACK",
+    version: 1,
+    exportedAt: backupInfo.generatedAt,
+    data: { ...state, backupInfo },
+    photos,
+  });
+  download(
+    `iron-track-${new Intl.DateTimeFormat("en-CA", { timeZone: "America/Mexico_City", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date())}.json`,
+    content,
+  );
+  return backupInfo;
 }

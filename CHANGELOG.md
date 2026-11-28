@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.3.0 — 28/11/2026
+
+Bitácora semanal privada con reflexiones e historial; metas personales de proceso editables y archivables; conteo por días únicos con trabajo real; vista semanal con acceso al historial de cada fecha; registro del último respaldo generado y generación rápida sin fotografías. Campos opcionales compatibles con estados y respaldos anteriores, sin modificar sesiones, rutinas ni fotografías existentes.
+
 ## 0.2.0 — 28/11/2026
 
 Eliminación recuperable de sesiones desde Historial con confirmación y Papelera persistente. Cancelación de entrenamiento, con opción de conservar series como sesión parcial. Comentarios generales por ejercicio, guardados en sesión y visibles/editables en el historial. Navegación al inicio de cada sección, pestaña de progreso y ejercicio. Refuerzo del bloqueo de pellizco y doble toque en captura. Versión visible al pie. Compatibilidad con registros y respaldos anteriores mediante campos opcionales, sin borrar ni reinicializar IndexedDB.
