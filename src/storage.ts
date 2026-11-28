@@ -33,7 +33,7 @@ const plan = z
     rest: z.number().min(0).max(3600),
   })
   .refine((p) => p.min <= p.max, "Rango de repeticiones inválido");
-export const stateSchema = z.object({
+const coreStateSchema = z.object({
   profile: z
     .object({
       name: z.string(),
@@ -75,6 +75,7 @@ export const stateSchema = z.object({
         z.object({
           exercise,
           plan,
+          notes: z.string().optional(),
           machine: z.string(),
           weightMode: z.enum(["total", "por mancuerna"]),
           sets: z.array(setSchema),
@@ -124,6 +125,16 @@ export const stateSchema = z.object({
     }),
   ),
 });
+export const stateSchema = coreStateSchema.extend({
+  sessionTrash: z
+    .array(
+      z.object({
+        session: coreStateSchema.shape.sessions.element,
+        deletedAt: z.iso.datetime(),
+      }),
+    )
+    .optional(),
+});
 export const backupSchema = z.object({
   app: z.literal("IRON TRACK"),
   version: z.literal(1),
@@ -145,7 +156,7 @@ export function validateBackup(value: unknown) {
   for (const group of [
     b.data.exercises,
     b.data.routines,
-    b.data.sessions,
+    [...b.data.sessions, ...(b.data.sessionTrash ?? []).map((t) => t.session)],
     b.data.measurements,
     b.data.recovery,
     b.data.decisions,

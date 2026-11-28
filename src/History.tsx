@@ -1,14 +1,17 @@
+import SessionRemoval from "./SessionRemoval";
 import { useState } from "react";
-import { Download } from "lucide-react";
+import { Download, Trash2, RotateCcw } from "lucide-react";
 import { download } from "./storage";
 import { type Session, type SetLog, today, dateLabel, dayKey } from "./model";
-import { createSession, physicalSets, tonnage } from "./engine";
+import { createSession, physicalSets, tonnage, restoreSession } from "./engine";
 import { useApp, Card, Empty, Field, Num } from "./ui";
 function History() {
   const { state, mutate, notify } = useApp();
   const [month, setMonth] = useState(today().slice(0, 7));
   const [selected, setSelected] = useState<Session | null>(null);
   const [date, setDate] = useState(today());
+  const [removing, setRemoving] = useState<Session | null>(null);
+  const [trashOpen, setTrashOpen] = useState(false);
   const sorted = [...state.sessions]
     .filter((s) => dayKey(s.startedAt).slice(0, 7) === month)
     .sort((a, b) => b.startedAt.localeCompare(a.startedAt));
@@ -135,7 +138,7 @@ function History() {
       {sorted.length ? (
         sorted.map((s) => (
           <Card key={s.id}>
-            <div className="row">
+            <div className="row history-session">
               <div>
                 <p className="eyebrow">
                   {dateLabel(s.startedAt)} · {s.status.toUpperCase()}
@@ -147,15 +150,93 @@ function History() {
                   {Math.round(s.exercises.reduce((n, e) => n + tonnage(e), 0))}{" "}
                   kg de volumen de carga
                 </p>
+                {!s.exercises.some((e) =>
+                  e.sets.some((x) => x.status === "completada"),
+                ) && <span className="tag">Sin series completadas</span>}
               </div>
-              <button onClick={() => setSelected(structuredClone(s))}>
-                Ver y editar
-              </button>
+              <div className="history-session-actions">
+                <button onClick={() => setSelected(structuredClone(s))}>
+                  Ver y editar
+                </button>
+                <button
+                  className="danger-button"
+                  aria-label={`Eliminar sesión de ${s.routineName} del ${dateLabel(s.startedAt)}`}
+                  onClick={() => setRemoving(s)}
+                >
+                  <Trash2 size={16} />
+                  Eliminar sesión
+                </button>
+              </div>
             </div>
           </Card>
         ))
       ) : (
         <Empty>No hay entrenamientos registrados en este mes.</Empty>
+      )}
+      <Card>
+        <button
+          className="subtle wide"
+          onClick={() => setTrashOpen(!trashOpen)}
+          aria-expanded={trashOpen}
+        >
+          <Trash2 size={16} />
+          Papelera ({state.sessionTrash?.length ?? 0})
+        </button>
+        {trashOpen && (
+          <div>
+            <p>
+              Las sesiones de la papelera no cuentan en tus estadísticas. Puedes
+              recuperarlas sin perder sus datos.
+            </p>
+            {state.sessionTrash?.length ? (
+              state.sessionTrash.map(({ session: s }) => (
+                <div className="record-row" key={s.id}>
+                  <div>
+                    <strong>{s.routineName}</strong>
+                    <small style={{ display: "block" }}>
+                      {dateLabel(s.startedAt)} ·{" "}
+                      {s.exercises.reduce(
+                        (n, e) => n + physicalSets(e.sets),
+                        0,
+                      )}{" "}
+                      series efectivas
+                    </small>
+                  </div>
+                  <button
+                    aria-label={`Recuperar sesión ${s.routineName}`}
+                    onClick={async () => {
+                      try {
+                        const saved = await mutate((st) =>
+                          restoreSession(st, s.id),
+                        );
+                        if (!saved) return;
+                        notify("Sesión recuperada con todos sus registros.");
+                      } catch (e) {
+                        notify(
+                          e instanceof Error
+                            ? e.message
+                            : "No se pudo recuperar la sesión.",
+                        );
+                      }
+                    }}
+                  >
+                    <RotateCcw size={16} />
+                    Recuperar sesión
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p>No hay sesiones en la papelera.</p>
+            )}
+          </div>
+        )}
+      </Card>
+      {removing && (
+        <SessionRemoval
+          session={removing}
+          onClose={() => setRemoving(null)}
+          onRemoved={() => setRemoving(null)}
+        />
       )}
       {selected && (
         <div className="modal-backdrop">
@@ -198,6 +279,17 @@ function History() {
             {selected.exercises.map((ex, i) => (
               <div key={i}>
                 <h3>{ex.exercise.name}</h3>
+                <Field label={`Comentarios generales · ${ex.exercise.name}`}>
+                  <textarea
+                    aria-label={`Comentarios generales · ${ex.exercise.name}`}
+                    value={ex.notes ?? ""}
+                    onChange={(e) => {
+                      const n = structuredClone(selected);
+                      n.exercises[i].notes = e.target.value;
+                      setSelected(n);
+                    }}
+                  />
+                </Field>
                 {ex.sets.map((s, j) => (
                   <div className="history-set" key={s.id}>
                     <span>
@@ -312,7 +404,21 @@ function History() {
                 }
               />
             </Field>
-            <button className="primary">Guardar correcciones</button>
+            <div className="actions">
+              <button className="primary">Guardar correcciones</button>
+              {state.sessions.some((s) => s.id === selected.id) && (
+                <button
+                  type="button"
+                  className="danger-button"
+                  onClick={() => {
+                    setRemoving(selected);
+                    setSelected(null);
+                  }}
+                >
+                  Eliminar sesión
+                </button>
+              )}
+            </div>
           </form>
         </div>
       )}

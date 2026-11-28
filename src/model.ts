@@ -64,6 +64,7 @@ export const setSchema = z.object({
 });
 export type SetLog = z.infer<typeof setSchema>;
 export type SessionExercise = {
+  notes?: string;
   exercise: Exercise;
   plan: Planned;
   machine: string;
@@ -152,6 +153,7 @@ export type State = {
   exercises: Exercise[];
   routines: Routine[];
   sessions: Session[];
+  sessionTrash?: { session: Session; deletedAt: string }[];
   measurements: Measurement[];
   recovery: Recovery[];
   decisions: Decision[];

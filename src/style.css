@@ -1995,3 +1995,30 @@ input[type="month"]::-webkit-datetime-edit {
   min-width: 0;
   padding: 0;
 }
+.history-session {
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.history-session > div:first-child {
+  flex: 1 1 230px;
+  min-width: 0;
+}
+.history-session-actions,
+.session-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.session-controls {
+  flex-wrap: wrap;
+}
+.exercise-comments .field {
+  margin-bottom: 8px;
+}
+html,
+body,
+#root,
+.app,
+.app * {
+  touch-action: pan-x pan-y;
+}

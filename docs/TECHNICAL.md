@@ -46,3 +46,7 @@ VitePWA genera precaché del código, CSS e iconos. No se cachean datos personal
 ## Calidad
 
 Vitest prueba cálculos y persistencia con fake-indexeddb. Playwright usa el build real en Chromium y WebKit. El conjunto revisa sesión, snapshot, medidas, respaldo/restauración, offline y anchuras 360/390/430/768/1024/1440. No equivale a pruebas físicas de iPhone/Android, auditoría médica ni certificación de accesibilidad.
+
+## Campos compatibles añadidos en 0.2.0
+
+`SessionExercise.notes?` guarda el comentario general sin modificar series ni datos del ejercicio del catálogo. `State.sessionTrash?` conserva sesiones retiradas con su fecha de retirada. Ambos campos son opcionales: los estados y respaldos anteriores siguen siendo válidos sin transformación destructiva. No se cambia la versión de IndexedDB ni se borra ninguna tabla. La eliminación solo mueve el ID elegido, y restaurar devuelve el objeto original. Las estadísticas usan `sessions`, de modo que la Papelera queda excluida. Se impide restaurar una sesión activa si ya existe otra. Los respaldos JSON incluyen la Papelera cuando existe; los informes deportivos y CSV no cuentan sus sesiones.

@@ -6,6 +6,7 @@ Aplicación de entrenamiento de fuerza en español de México. Primera versión 
 
 - Seis rutinas iniciales, con distribución de 18 / 21 / 17 / 20 / 21 / 16 series: 113 en total.
 - Crear, editar, duplicar, archivar, reordenar y restaurar rutinas. Las sesiones conservan una copia de su planificación.
+- Sesiones eliminables con confirmación y Papelera recuperable; cancelación con conservación opcional como parcial; comentarios generales por ejercicio.
 - Sesión activa recuperable, cargas por serie, repeticiones, RIR, RPE opcional, estados, lados, tipos de serie y segmentos descendentes.
 - Comparación con la última sesión del mismo ejercicio, equipo y convención de carga.
 - Temporizador persistente con fechas absolutas, pausa y ajustes; sonido y vibración opcionales; solicitud de Wake Lock.

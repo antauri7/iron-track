@@ -201,3 +201,85 @@ describe("fechas, tendencias y estimación", () => {
       ).toBe(n);
   });
 });
+
+describe("papelera y compatibilidad con sesiones antiguas", () => {
+  it("retira solo la sesión elegida y permite restaurarla íntegra", async () => {
+    const { moveSessionToTrash, restoreSession } =
+      await import("../src/engine");
+    const state = initialState();
+    state.sessions = Array.from({ length: 3 }, () => {
+      const s = createSession(seedRoutines[2], seedExercises);
+      s.status = "completada";
+      s.endedAt = s.startedAt;
+      s.exercises[0].sets[0] = {
+        ...s.exercises[0].sets[0],
+        weight: 40,
+        reps: 8,
+        rir: 2,
+        status: "completada",
+      };
+      return s;
+    });
+    const originals = structuredClone(state.sessions);
+    const accidental = createSession(seedRoutines[2], seedExercises);
+    state.sessions.push(accidental);
+    moveSessionToTrash(state, accidental.id);
+    expect(state.sessions).toEqual(originals);
+    expect(state.sessionTrash![0].session).toEqual(accidental);
+    restoreSession(state, accidental.id);
+    expect(state.sessions).toEqual([...originals, accidental]);
+    expect(state.sessionTrash).toHaveLength(0);
+    moveSessionToTrash(state, "missing");
+    expect(state.sessions).toHaveLength(4);
+  });
+  it("acepta respaldos anteriores sin comentarios ni papelera y preserva tres sesiones", () => {
+    const data = initialState();
+    data.sessions = Array.from({ length: 3 }, () => {
+      const s = createSession(seedRoutines[0], seedExercises);
+      s.status = "completada";
+      return s;
+    });
+    const old = validateBackup({
+      app: "IRON TRACK",
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      data,
+    });
+    expect(old.data.sessions).toEqual(data.sessions);
+    expect(old.data.sessionTrash).toBeUndefined();
+  });
+  it("incluye comentarios y papelera en el roundtrip de un respaldo", async () => {
+    const { moveSessionToTrash } = await import("../src/engine");
+    const data = initialState();
+    const s = createSession(seedRoutines[0], seedExercises);
+    s.exercises[0].notes = "Equipo alternativo de prueba";
+    data.sessions.push(s);
+    moveSessionToTrash(data, s.id);
+    const backup = validateBackup(
+      JSON.parse(
+        JSON.stringify({
+          app: "IRON TRACK",
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          data,
+        }),
+      ),
+    );
+    expect(backup.data.sessionTrash![0].session.exercises[0].notes).toBe(
+      "Equipo alternativo de prueba",
+    );
+    expect(backup.data.sessions).toHaveLength(0);
+  });
+  it("no restaura una segunda sesión activa ni pierde su copia", async () => {
+    const { moveSessionToTrash, restoreSession } =
+      await import("../src/engine");
+    const data = initialState();
+    const a = createSession(seedRoutines[0], seedExercises);
+    data.sessions.push(a);
+    moveSessionToTrash(data, a.id);
+    data.sessions.push(createSession(seedRoutines[1], seedExercises));
+    expect(() => restoreSession(data, a.id)).toThrow();
+    expect(data.sessionTrash![0].session.id).toBe(a.id);
+    expect(data.sessions).toHaveLength(1);
+  });
+});

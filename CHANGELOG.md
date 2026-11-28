@@ -1,5 +1,9 @@
 # Cambios
 
+## 0.2.0 — 28/11/2026
+
+Eliminación recuperable de sesiones desde Historial con confirmación y Papelera persistente. Cancelación de entrenamiento, con opción de conservar series como sesión parcial. Comentarios generales por ejercicio, guardados en sesión y visibles/editables en el historial. Navegación al inicio de cada sección, pestaña de progreso y ejercicio. Refuerzo del bloqueo de pellizco y doble toque en captura. Versión visible al pie. Compatibilidad con registros y respaldos anteriores mediante campos opcionales, sin borrar ni reinicializar IndexedDB.
+
 ## 0.1.2 — 25/11/2026
 
 Corregido el ancho de los campos nativos de fecha y mes en Safari/iOS para mantenerlos dentro de sus tarjetas, incluido el inicio del ciclo en Mi Coach. Se conserva el selector nativo y el guardado automático.

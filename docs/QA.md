@@ -29,3 +29,7 @@ Instalación en teléfonos físicos, actualización entre dos versiones de produ
 ## Actualización 0.1.1: iPhone y guardado de perfil
 
 Se añadió una prueba de regresión al introducir estatura dígito por dígito y recuperar el perfil tras recargar. La simulación móvil usa 440 × 956 píxeles CSS y DPR 3, con orientación horizontal adicional; comprueba tamaño de texto, controles de 44 px, ausencia de desborde y cancelación de eventos de zoom sin bloquear el desplazamiento con un dedo. La confirmación de guardado solo aparece tras terminar las escrituras IndexedDB pendientes. No se ha probado físicamente un iPhone 17 Pro Max ni el zoom de accesibilidad del sistema.
+
+## Actualización 0.2.0: sesiones y conservación del historial
+
+Se añadieron cuatro pruebas unitarias para retirada/restauración íntegra de una sesión sin modificar otras tres, respaldos anteriores sin campos nuevos, comentarios y Papelera en respaldo, y prevención de dos sesiones activas. Se añadieron seis flujos funcionales ejecutados en Chromium y WebKit: retirar/restaurar la sesión vacía; cancelar sin alterar tres sesiones anteriores; comentarios por ejercicio tras navegación, recarga y lectura histórica; conservación como parcial; regreso arriba al navegar; cancelación de eventos de pellizco y doble toque conservando el desplazamiento. Los datos son sintéticos y viven en contextos de prueba aislados; no se leen ni modifican los registros del teléfono del usuario. El bloqueo del zoom de accesibilidad del sistema no está bajo control de una web.

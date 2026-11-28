@@ -38,6 +38,7 @@ export default function App() {
   const ref = useRef<State | null>(null);
   const queue = useRef(Promise.resolve());
   const pendingSaves = useRef(0);
+  const saveFailed = useRef(false);
   const [saveStatus, setSaveStatus] = useState<"saving" | "saved" | "error">(
     "saved",
   );
@@ -90,20 +91,26 @@ export default function App() {
     setState(next);
     pendingSaves.current += 1;
     setSaveStatus("saving");
-    queue.current = queue.current
+    const write = queue.current
       .then(async () => {
         await db.state.put({ id: "main", value: next });
         setError("");
+        saveFailed.current = false;
         pendingSaves.current -= 1;
         if (pendingSaves.current === 0) setSaveStatus("saved");
+        return true;
       })
       .catch(() => {
         pendingSaves.current -= 1;
         setSaveStatus("error");
+        saveFailed.current = true;
         setError(
           "No se pudo guardar el último cambio. Exporta un respaldo y revisa el espacio del dispositivo.",
         );
+        return false;
       });
+    queue.current = write.then(() => {});
+    return write;
   };
   if (!state)
     return (
@@ -171,7 +178,15 @@ export default function App() {
           {update && (
             <div className="alert">
               Hay una actualización disponible. Tus registros se conservan.{" "}
-              <button onClick={() => update(true)}>Actualizar</button>
+              <button
+                onClick={async () => {
+                  await queue.current;
+                  if (!saveFailed.current && pendingSaves.current === 0)
+                    await update(true);
+                }}
+              >
+                Actualizar
+              </button>
             </div>
           )}
           <Suspense fallback={<Empty>Cargando módulo…</Empty>}>
@@ -196,7 +211,8 @@ export default function App() {
             </Routes>
           </Suspense>
           <footer>
-            IRON TRACK <span>Construye tu siguiente versión.</span>
+            IRON TRACK · v{__APP_VERSION__}{" "}
+            <span>Construye tu siguiente versión.</span>
           </footer>
         </div>
         {message && (

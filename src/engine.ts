@@ -5,6 +5,7 @@ import type {
   SessionExercise,
   SetLog,
   Muscle,
+  State,
 } from "./model";
 import { uid, blankSet } from "./model";
 export const isEffective = (s: SetLog) =>
@@ -209,4 +210,33 @@ export function detectTrend(history: SessionExercise[]) {
   )
     return "estable" as const;
   return "variable" as const;
+}
+
+/** Reversible removal; the other sessions and related records remain untouched. */
+export function moveSessionToTrash(
+  state: State,
+  id: string,
+  deletedAt = new Date().toISOString(),
+) {
+  const index = state.sessions.findIndex((s) => s.id === id);
+  if (index < 0) return;
+  const [session] = state.sessions.splice(index, 1);
+  state.sessionTrash ??= [];
+  state.sessionTrash.push({ session, deletedAt });
+}
+export function restoreSession(state: State, id: string) {
+  const index = state.sessionTrash?.findIndex((t) => t.session.id === id) ?? -1;
+  if (index < 0) return;
+  const session = state.sessionTrash![index].session;
+  if (state.sessions.some((s) => s.id === id))
+    throw new Error("Esta sesión ya está en el historial.");
+  if (
+    session.status === "activa" &&
+    state.sessions.some((s) => s.status === "activa")
+  )
+    throw new Error(
+      "Finaliza o cancela la sesión activa antes de recuperar otra sesión en curso.",
+    );
+  state.sessions.push(session);
+  state.sessionTrash!.splice(index, 1);
 }

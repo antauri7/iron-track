@@ -1,3 +1,4 @@
+import { scrollToTop } from "./navigation";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -84,7 +85,10 @@ function Progress() {
             <button
               key={t}
               className={t === tab ? "selected" : ""}
-              onClick={() => setTab(t)}
+              onClick={() => {
+                setTab(t);
+                scrollToTop();
+              }}
             >
               {t}
             </button>

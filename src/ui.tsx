@@ -11,7 +11,7 @@ import { Activity } from "lucide-react";
 import { type State } from "./model";
 export type AppContext = {
   state: State;
-  mutate: (fn: (s: State) => void) => void;
+  mutate: (fn: (s: State) => void) => Promise<boolean>;
   notify: (s: string) => void;
   saveStatus: "saving" | "saved" | "error";
 };

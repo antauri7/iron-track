@@ -1,3 +1,5 @@
+import SessionRemoval from "./SessionRemoval";
+import { scrollToTop } from "./navigation";
 import ExerciseVisual from "./ExerciseVisual";
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -30,6 +32,10 @@ function Active() {
   const [index, setIndex] = useState(0);
   const [tick, setTick] = useState(Date.now());
   const [finish, setFinish] = useState(false);
+  const [cancel, setCancel] = useState(false);
+  useEffect(() => {
+    scrollToTop();
+  }, [index]);
   const alarm = useRef(false);
   useEffect(() => {
     const t = setInterval(() => setTick(Date.now()), 500);
@@ -144,12 +150,17 @@ function Active() {
       <div className="progress-track">
         <div style={{ width: `${Math.min(100, (done / total) * 100)}%` }} />
       </div>
-      <div className="row">
+      <div className="row session-controls">
         <p className="muted">
           Ejercicio {index + 1} de {session.exercises.length} · {done} / {total}{" "}
           series
         </p>
-        <button onClick={() => setFinish(true)}>Finalizar sesión</button>
+        <div className="session-actions">
+          <button onClick={() => setCancel(true)}>
+            Cancelar entrenamiento
+          </button>
+          <button onClick={() => setFinish(true)}>Finalizar sesión</button>
+        </div>
       </div>
       {elapsed >= ((state.profile?.minutes ?? 90) - 15) * 60 && (
         <div className="alert">
@@ -250,6 +261,29 @@ function Active() {
                 </Field>
               </div>
             </details>
+          </Card>
+          <Card className="exercise-comments">
+            <Field label="Comentarios generales del ejercicio">
+              <textarea
+                aria-label="Comentarios generales del ejercicio"
+                value={current.notes ?? ""}
+                placeholder="Anota cambios de máquina, trabajo unilateral, molestias o cualquier observación de este ejercicio."
+                onChange={(e) =>
+                  editExercise((ex) => {
+                    ex.notes = e.target.value;
+                  })
+                }
+              />
+            </Field>
+            <small>
+              Se guarda automáticamente para este ejercicio y esta sesión.
+            </small>
+            {previous?.notes && (
+              <details>
+                <summary>Comentario de la sesión comparable anterior</summary>
+                <p>{previous.notes}</p>
+              </details>
+            )}
           </Card>
           <Card className="set-card">
             <div className="set-head">
@@ -725,6 +759,14 @@ function Active() {
           </Card>
         </div>
       </div>
+      {cancel && (
+        <SessionRemoval
+          session={session}
+          mode="cancel"
+          onClose={() => setCancel(false)}
+          onRemoved={() => navigate("/entrenar")}
+        />
+      )}
       {finish && (
         <div className="modal-backdrop">
           <Card className="modal">
