@@ -285,3 +285,46 @@ test("bloqueo táctil del entrenamiento evita pellizcos y doble toque, no despla
   expect(result.action).toBe("pan-x pan-y");
   await context.close();
 });
+
+test("correcciones recalculan parcial y completada sin alterar otras sesiones", async ({
+  page,
+}) => {
+  await enter(page);
+  const sessions = legacySessions();
+  sessions[0].status = "parcial";
+  sessions[0].exercises[0].sets[0].status = "pendiente";
+  sessions[0].startedAt = new Date(Date.now() + 1000).toISOString();
+  await seed(page, sessions);
+  await page.goto("/#/historial");
+  await page
+    .getByRole("button", { name: "Ver y editar", exact: true })
+    .first()
+    .click();
+  await page
+    .getByLabel("Estado histórico", { exact: true })
+    .first()
+    .selectOption("completada");
+  await page
+    .getByRole("button", { name: "Guardar correcciones", exact: true })
+    .click();
+  await expect(page.locator("form.modal")).toHaveCount(0);
+  let stored = await read(page);
+  expect(stored.sessions[0].status).toBe("completada");
+  expect(stored.sessions.slice(1)).toEqual(sessions.slice(1));
+  await page.reload();
+  await page
+    .getByRole("button", { name: "Ver y editar", exact: true })
+    .first()
+    .click();
+  await page
+    .getByLabel("Estado histórico", { exact: true })
+    .first()
+    .selectOption("omitida");
+  await page
+    .getByRole("button", { name: "Guardar correcciones", exact: true })
+    .click();
+  await expect(page.locator("form.modal")).toHaveCount(0);
+  stored = await read(page);
+  expect(stored.sessions[0].status).toBe("parcial");
+  expect(stored.sessions.slice(1)).toEqual(sessions.slice(1));
+});

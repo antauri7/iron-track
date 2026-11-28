@@ -282,7 +282,7 @@ function History() {
         <div className="modal-backdrop">
           <form
             className="modal large"
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
               if (
                 selected.exercises.some((ex) =>
@@ -299,11 +299,20 @@ function History() {
                 return notify(
                   "Completa carga, repeticiones y RIR de cada serie marcada como completada.",
                 );
-              mutate((st) => {
+              const corrected = structuredClone(selected);
+              corrected.status =
+                corrected.exercises.length > 0 &&
+                corrected.exercises.every(
+                  (ex) => physicalSets(ex.sets) >= ex.plan.sets,
+                )
+                  ? "completada"
+                  : "parcial";
+              const saved = await mutate((st) => {
                 const idx = st.sessions.findIndex((s) => s.id === selected.id);
-                if (idx < 0) st.sessions.push(selected);
-                else st.sessions[idx] = selected;
+                if (idx < 0) st.sessions.push(corrected);
+                else st.sessions[idx] = corrected;
               });
+              if (!saved) return;
               setSelected(null);
               notify(
                 "Historial actualizado. Las estadísticas se recalcularon.",
